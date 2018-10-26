@@ -5,7 +5,7 @@ var socket = require('socket.io');
 var app = express();
 app.set('port', process.env.PORT || 4000);
 var server = app.listen(app.get('port'), function(){
-    console.log('listening for requests on port 4000,');
+    console.log('listening for requests on port 4000');
 });
 
 // Static files
@@ -21,7 +21,6 @@ io.on('connection', (socket) => {
     console.log(nUsers);
     // Handle chat event
     socket.on('chat', function(data){
-        // console.log(data);
         io.sockets.emit('chat', data);
     });
 

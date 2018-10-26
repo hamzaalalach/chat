@@ -1,6 +1,6 @@
 // Make connection
 var socket = io.connect('http://hmchat.herokuapp.com');
-
+//10.11.1.188:4000
 // Query DOM
 var message = document.getElementById('message'),
       handle = document.getElementById('handle'),
@@ -19,7 +19,7 @@ btn.addEventListener('click', function() {
     message.value = "";
 });
 
-message.addEventListener('keypress', function(e) {
+message.addEventListener('keydown', function(e) {
 	clearTimeout(keypressed)
     socket.emit('typing', handle.value);
     if (e.keyCode == 13) {
