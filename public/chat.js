@@ -20,16 +20,16 @@ btn.addEventListener('click', function() {
 });
 
 message.addEventListener('keydown', function(e) {
-	clearTimeout(keypressed)
     socket.emit('typing', handle.value);
     if (e.keyCode == 13) {
     	btn.click();
     }
 })
 message.addEventListener('keyup', function() {
+	clearTimeout(keypressed)
 	keypressed = setTimeout(function() {
 		socket.emit('stopedTyping');
-	}, 1000);
+	}, 2000);
 })
 // Listen for events
 socket.on('chat', function(data){
