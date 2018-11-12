@@ -13,7 +13,7 @@ var message = document.getElementById('message'),
 
 
 handle.addEventListener('keydown', function(e) {
-  if (e.keyCode == 13) {
+  if (e.keyCode == 13 && handle.value != '') {
     overlay.style.display = 'none';
   }
 });
@@ -58,12 +58,18 @@ message.addEventListener('keydown', function(e) {
     	btn.click();
     }
 })
+
 message.addEventListener('keyup', function() {
   clearTimeout(keypressed);
 	keypressed = setTimeout(function() {
 		socket.emit('stopedTyping');
 	}, 1500);
 })
+
+window.addEventListener('beforeunload', function() {
+  socket.emit('disconnect');
+});
+
 // Listen for events
 socket.on('chat', function(data){
     feedback.innerHTML = '';
