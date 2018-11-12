@@ -53,6 +53,7 @@ message.addEventListener('keydown', function(e) {
     if (e.keyCode != 9 && e.keyCode != 13 && e.keyCode != 16 && e.keyCode != 17 && e.keyCode != 18 && e.keyCode != 20) {   
       socket.emit('typing', handle.value);
     }
+    socket.emit('typing', handle.value);
     if (e.keyCode == 13) {
     	btn.click();
     }
