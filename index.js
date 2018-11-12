@@ -14,7 +14,7 @@ app.use(express.static('public'));
 // Socket setup & pass server
 var io = socket(server),
     nUsers = 0;
-io.on('connection', (socket) => {
+io.on('connection', function(socket) {
     console.log('Made socket connection', socket.id);
     nUsers++;
     io.sockets.emit('userConnected', nUsers);

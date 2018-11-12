@@ -1,6 +1,6 @@
 // Make connection
 var socket = io.connect('http://hmchat.herokuapp.com');
-//10.11.1.188:4000
+//http://hmchat.herokuapp.com
 // Query DOM
 var message = document.getElementById('message'),
       handle = document.getElementById('handle'),
@@ -8,33 +8,66 @@ var message = document.getElementById('message'),
       output = document.getElementById('output'),
       feedback = document.getElementById('feedback'),
       keypressed,
-      usersOnline = document.getElementById('usersOnline');
+      usersOnline = document.getElementById('usersOnline'),
+      overlay = document.getElementById('overlay');
 
+
+handle.addEventListener('keydown', function(e) {
+  if (e.keyCode == 13) {
+    overlay.style.display = 'none';
+  }
+});
+
+
+function positionOptions() {
+  if (window.innerHeight <= '260') {
+    output.style.height = window.innerHeight * 82 / 100 - 50 + 'px';
+  } else if (window.innerHeight <= '400') {
+    output.style.height = window.innerHeight * 85 / 100 - 50 + 'px';
+  } else {
+    output.style.height = window.innerHeight * 90 / 100 - 50 + 'px';
+  }
+}
+positionOptions();
+window.addEventListener('resize', function() {
+  positionOptions();
+});
+
+
+function scrollToBottom() {
+  output.scrollTop = output.scrollHeight;
+}
 // Emit events
 btn.addEventListener('click', function() {
+  if (message.value != '') {
     socket.emit('chat', {
         message: message.value,
         handle: handle.value
     });
     message.value = "";
+  }
+  message.focus();
 });
 
 message.addEventListener('keydown', function(e) {
-	clearTimeout(keypressed)
-    socket.emit('typing', handle.value);
+    if (e.keyCode != 9 && e.keyCode != 13 && e.keyCode != 16 && e.keyCode != 17 && e.keyCode != 18 && e.keyCode != 20) {   
+      socket.emit('typing', handle.value);
+    }
     if (e.keyCode == 13) {
     	btn.click();
     }
 })
 message.addEventListener('keyup', function() {
+  clearTimeout(keypressed);
 	keypressed = setTimeout(function() {
 		socket.emit('stopedTyping');
-	}, 1000);
+	}, 1500);
 })
 // Listen for events
 socket.on('chat', function(data){
     feedback.innerHTML = '';
-    output.innerHTML += '<p><strong>' + data.handle + ': </strong>' + data.message + '</p>';
+    output.innerHTML += '<p><strong>' + data.handle + '&nbsp;&nbsp;&nbsp;&nbsp;</strong>&nbsp;<span>' + data.message + '</span></p>';
+    scrollToBottom();
 });
 
 socket.on('typing', function(data){
