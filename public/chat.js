@@ -1,15 +1,15 @@
 // Make connection
 var socket = io.connect('//hmchat.herokuapp.com');
-//http://hmchat.herokuapp.com
+//hmchat.herokuapp.com
 // Query DOM
 var message = document.getElementById('message'),
-      handle = document.getElementById('handle'),
-      btn = document.getElementById('send'),
-      output = document.getElementById('output'),
-      feedback = document.getElementById('feedback'),
-      keypressed,
-      usersOnline = document.getElementById('usersOnline'),
-      overlay = document.getElementById('overlay');
+    handle = document.getElementById('handle'),
+    btn = document.getElementById('send'),
+    output = document.getElementById('output'),
+    feedback = document.getElementById('feedback'),
+    keypressed,
+    usersOnline = document.getElementById('usersOnline'),
+    overlay = document.getElementById('overlay');
 
 
 handle.addEventListener('keydown', function(e) {
@@ -53,7 +53,6 @@ message.addEventListener('keydown', function(e) {
     if (e.keyCode != 9 && e.keyCode != 13 && e.keyCode != 16 && e.keyCode != 17 && e.keyCode != 18 && e.keyCode != 20) {   
       socket.emit('typing', handle.value);
     }
-    socket.emit('typing', handle.value);
     if (e.keyCode == 13) {
     	btn.click();
     }
@@ -67,7 +66,7 @@ message.addEventListener('keyup', function() {
 })
 
 window.addEventListener('beforeunload', function() {
-  socket.emit('disconnect');
+  socket.emit('userLeft');
 });
 
 // Listen for events
@@ -78,7 +77,7 @@ socket.on('chat', function(data){
 });
 
 socket.on('typing', function(data){
-    feedback.innerHTML = '<p><em>' + data + ' is typing a message...</em></p>';
+    feedback.innerHTML = '<p><em>' + data + ' is typing...</em></p>';
 });
 
 socket.on('stopedTyping', function() {

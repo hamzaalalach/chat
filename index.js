@@ -4,7 +4,7 @@ var socket = require('socket.io');
 // App setup
 var app = express();
 app.set('port', process.env.PORT || 4000);
-var server = app.listen(app.get('port'), function(){
+var server = app.listen(app.get('port'), function() {
     console.log('listening for requests on port 4000');
 });
 
@@ -35,5 +35,9 @@ io.on('connection', function(socket) {
         nUsers--;
         io.sockets.emit('userConnected', nUsers);
         console.log(nUsers);
+    });
+    socket.on('userLeft', function() {
+        var data = nUsers - 1;
+        io.sockets.emit('userConnected', data);
     });
 });
